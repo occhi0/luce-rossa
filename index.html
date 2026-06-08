@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔴 Luce Rossa — Pluto Pulsar</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fdf3f1;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    /* ── HEADER ── */
+    .app-header {
+      background: linear-gradient(135deg, #ff6a5c 0%, #ff3b30 100%);
+      color: white;
+      padding: 18px 20px 0;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .app-header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+      color: #fff;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    }
+    .app-header .sub { font-size: 0.78rem; font-weight: 400; opacity: 0.9; display:block; margin-top:-8px; margin-bottom:10px; }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      overflow-x: auto;
+      padding-bottom: 0;
+    }
+    .tab-btn {
+      background: rgba(255,255,255,0.18);
+      border: none;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 10px 10px 0 0;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { background: rgba(255,255,255,0.3); }
+    .tab-btn.active { background: #fdf3f1; color: #ff3b30; font-weight: 700; }
+
+    /* ── MAIN CONTAINER ── */
+    .container { max-width: 800px; margin: 0 auto; padding: 20px 15px 40px; }
+
+    /* ── SECTIONS ── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── CARDS ── */
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border: 1px solid #f3dad5;
+    }
+    .card h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f3dad5;
+      color: #c0392b;
+    }
+    .card h3 { font-size: 0.92rem; color:#b8443a; margin: 12px 0 6px; }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      color: white;
+      font-size: 1.25rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #ff6a5c, #ff3b30);
+    }
+
+    /* ── PROTOCOL CARDS ── */
+    .proto-meta { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+    .chip {
+      background:#fff0ee; color:#c0392b; border:1px solid #f3c4bd;
+      border-radius:8px; padding:5px 10px; font-size:0.82rem; font-weight:600;
+    }
+    .chip b { font-weight:700; }
+    .proto-body { font-size:0.9rem; line-height:1.5; color:#444; }
+    .proto-body ul { margin:6px 0 6px 18px; }
+    .proto-body li { margin-bottom:4px; }
+    .warn { background:#fff8e1; border-left:4px solid #f1c40f; padding:8px 12px; border-radius:6px; margin:8px 0; font-size:0.85rem; }
+    .danger { background:#fdecea; border-left:4px solid #e74c3c; padding:8px 12px; border-radius:6px; margin:8px 0; font-size:0.85rem; }
+
+    /* ── FORM ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full-width { grid-column: 1 / -1; }
+    .form-group label { font-size: 0.8rem; font-weight: 600; color: #555; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 9px 12px;
+      border: 2px solid #f3dad5;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: #333;
+      background: white;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: #ff6a5c; outline: none; }
+    .form-group textarea { resize: vertical; }
+
+    /* ── CALC OUTPUT ── */
+    .calc-out {
+      background: linear-gradient(135deg, #ff6a5c, #ff3b30);
+      color:#fff; border-radius:12px; padding:18px; text-align:center; margin-top:8px;
+    }
+    .calc-out .big { font-size:2rem; font-weight:800; display:block; }
+    .calc-out .lbl { font-size:0.8rem; opacity:0.9; }
+    .calc-out .ctx { font-size:0.82rem; margin-top:8px; opacity:0.95; }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #ff6a5c, #ff3b30);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .card-header-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #f3dad5;
+    }
+    .card-header-row h2 { border: none; margin: 0; padding: 0; }
+    .btn-export {
+      padding: 6px 12px; background: #c0392b; color: white; border: none;
+      border-radius: 8px; font-family: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    }
+
+    /* ── LISTA ── */
+    .lista-vuota { color: #bbb; font-style: italic; font-size: 0.9rem; padding: 10px 0; }
+    .lista-item {
+      background: #fff; border: 1px solid #f3dad5; border-radius: 8px;
+      padding: 10px 14px; margin-bottom: 8px; position: relative;
+    }
+    .lista-item .item-date  { font-size: 0.8rem; color: #c0392b; font-weight: 700; }
+    .lista-item .item-main  { font-size: 0.9rem; margin: 4px 0; color: #333; }
+    .lista-item .item-note  { font-size: 0.8rem; color: #888; font-style: italic; }
+    .lista-item .btn-del {
+      position: absolute; top: 8px; right: 8px;
+      background: none; border: none; color: #ddd; cursor: pointer; font-size: 1rem; padding: 2px 6px;
+    }
+    .lista-item .btn-del:hover { color: #e74c3c; }
+    .hint { font-size: 0.75rem; color: #999; margin-top:4px; }
+    .footer-note { text-align:center; font-size:0.72rem; color:#bba; padding:14px; }
+  </style>
+</head>
+<body>
+  <div class="app-header">
+    <h1>🔴 Luce Rossa</h1>
+    <span class="sub">Pluto Pulsar · 630/670/810/830/850 nm</span>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showSection('protocolli')">📋 Protocolli</button>
+      <button class="tab-btn" onclick="showSection('calcolatore')">🧮 Calcolatore</button>
+      <button class="tab-btn" onclick="showSection('diario')">📒 Diario</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ══ PROTOCOLLI ══ -->
+    <div id="protocolli" class="section active">
+      <div class="section-title">📋 Protocolli</div>
+      <div id="proto-list"></div>
+      <div class="card" style="background:#fff8e1;border-color:#f1d99a;">
+        <h3 style="color:#a07a00;">💡 Regole generali Pluto</h3>
+        <div class="proto-body">
+          <ul>
+            <li><b>COB + LED</b> entrambi accesi (rosso + infrarosso insieme)</li>
+            <li>Modalità <b>continua</b> (pulsata in sospeso fino al libro Rossiello)</li>
+            <li>Pelle <b>nuda e pulita</b>, niente creme/oli prima (pomate dopo)</li>
+            <li>⛔ <b>Mai la sera</b> — effetto stimolante, riduce melatonina</li>
+            <li>Frequenza ideale <b>3-7 volte/settimana</b></li>
+            <li><b>"Di più non è meglio"</b> — legge bifasica: troppo = stress ossidativo</li>
+            <li>Budget = <b>minuti-PER-ZONA</b> (max ~15-20 min su stessa zona), non minuti totali di lampada</li>
+            <li>Pause su sessioni lunghe (la lampada si scalda, non bloccare ventole)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CALCOLATORE ══ -->
+    <div id="calcolatore" class="section">
+      <div class="section-title">🧮 Calcolatore dose</div>
+      <div class="card">
+        <h2>Distanza + tempo → dose</h2>
+        <p class="hint">Base Pluto: 40 mW/cm² a 10 cm. La dose dipende dalla distanza (al quadrato) e dal tempo.</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Distanza (cm)</label>
+            <input type="number" id="calc-dist" value="30" min="3" step="1" oninput="calcola()">
+          </div>
+          <div class="form-group">
+            <label>Tempo (minuti)</label>
+            <input type="number" id="calc-time" value="5" min="0.5" step="0.5" oninput="calcola()">
+          </div>
+        </div>
+        <div class="calc-out">
+          <span class="big" id="calc-dose">—</span>
+          <span class="lbl">J/cm² (dose in superficie)</span>
+          <div class="ctx" id="calc-ctx"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Riferimenti dose</h3>
+        <div class="proto-body">
+          <ul>
+            <li><b>Viso/antiaging:</b> ~0,5-1,3 J/cm²</li>
+            <li><b>Dermatite:</b> ottimale ~4 J/cm² (range 2-8)</li>
+            <li><b>Grasso/inestetismi:</b> studi alti (fino 127), con Pluto ~5-16 J/cm²</li>
+            <li><b>Articolazioni:</b> prevenzione ~10-16 J/cm² (terapeutico 39-52)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ DIARIO ══ -->
+    <div id="diario" class="section">
+      <div class="section-title">📒 Diario sessioni</div>
+      <div class="card">
+        <h2>Nuova sessione</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Data</label>
+            <input type="date" id="s-data">
+          </div>
+          <div class="form-group">
+            <label>Zona / uso</label>
+            <select id="s-zona">
+              <option>Viso</option>
+              <option>Dermatite (dorso)</option>
+              <option>Grasso/inestetismi addome</option>
+              <option>Articolazione — ginocchio</option>
+              <option>Articolazione — spalla</option>
+              <option>Altro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Distanza (cm)</label>
+            <input type="number" id="s-dist" value="30" min="3" oninput="calcDiario()">
+          </div>
+          <div class="form-group">
+            <label>Tempo (min)</label>
+            <input type="number" id="s-time" value="5" min="0.5" step="0.5" oninput="calcDiario()">
+          </div>
+          <div class="form-group">
+            <label>Dose (auto)</label>
+            <input type="text" id="s-dose" readonly style="background:#fff0ee;font-weight:700;color:#c0392b;">
+          </div>
+          <div class="form-group full-width">
+            <label>Osservazioni</label>
+            <textarea id="s-note" rows="2" placeholder="reazione pelle, sensazioni, risultati..."></textarea>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="salvaSessione()">💾 Salva sessione</button>
+      </div>
+      <div class="card">
+        <div class="card-header-row">
+          <h2>Storico</h2>
+          <button class="btn-export" onclick="exportCSV()">⬇ CSV</button>
+        </div>
+        <div id="storico-list"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-note">App personale · dati salvati solo su questo dispositivo (localStorage)</div>
+
+  <script>
+    /* ═══ DATI PROTOCOLLI ═══ */
+    const PROTOCOLLI = [
+      {
+        icona:'✨', nome:'Viso / antiaging', nm:'630 nm (rosso)', prof:'Superficiale',
+        dist:'30 cm', tempo:'2 → 5 min', freq:'3-4×/sett', dose:'~0,5-1,3 J/cm²',
+        body:`<p>Stimola collagene/elastina, riduce rughe fini e migliora il tono.</p>
+        <ul>
+          <li>Parti da <b>2 min</b> la prima settimana (test), poi sali a <b>5 min</b></li>
+          <li>Ciclo minimo <b>4 settimane</b>; risultati visibili dopo 4-8 settimane</li>
+          <li>Occhi <b>chiusi</b> (o aperti max 3 min)</li>
+        </ul>
+        <div class="warn">⚠️ A 30 cm la pelle del viso (delicata) non va sovradosata: niente 15 cm sul viso.</div>`
+      },
+      {
+        icona:'🩹', nome:'Dermatite atopica (dorso)', nm:'630 nm (rosso)', prof:'Superficiale',
+        dist:'30 cm', tempo:'3-5 → 15 min (gradini)', freq:'3-4×/sett', dose:'ottimale ~4 J/cm²',
+        body:`<p>Antinfiammatorio + riparativo (meccanismo diverso da cortisone/immunosoppressori).</p>
+        <ul>
+          <li><b>Sett. 1:</b> 3-5 min (~1 J/cm²) — test su piccola area + osserva 24h</li>
+          <li><b>Sett. 2-3:</b> 7-8 min (~2 J/cm²)</li>
+          <li><b>Sett. 4+:</b> ~15 min (~4 J/cm²)</li>
+        </ul>
+        <div class="danger">⛔ Mai su pelle aperta/sanguinante. Pomate DOPO, non prima.</div>`
+      },
+      {
+        icona:'🔥', nome:'Grasso / inestetismi addome', nm:'810+850 nm (NIR) + rosso', prof:'Profondo',
+        dist:'15 cm', tempo:'5-15 min/zona', freq:'3×/sett', dose:'~5-16 J/cm²',
+        body:`<p><b>Due obiettivi diversi:</b></p>
+        <ul>
+          <li><b>Volume/centimetri:</b> coadiuvante modesto — la luce libera i lipidi ma vanno consumati con <b>movimento subito dopo</b>, altrimenti rientrano. Non è un dimagrante.</li>
+          <li><b>Inestetismi (cellulite, tono, pelle):</b> razionale più solido (microcircolo + linfa + collagene). Qui <b>non serve</b> attività fisica dopo. L'850 nm penetra bene.</li>
+        </ul>
+        <div class="warn">⚠️ Sotto-dosato vs studi (pannelli grandi). Aspettative modeste; per grasso viscerale meglio dieta+attività.</div>`
+      },
+      {
+        icona:'🦵', nome:'Articolazioni (prevenzione)', nm:'810/830/850 nm (NIR)', prof:'Profondo',
+        dist:'15 cm', tempo:'10-15 min/zona', freq:'3×/sett', dose:'~10-16 J/cm²',
+        body:`<p>NIR 780-860 nm raccomandato (WALT). Riduce infiammazione, supporta cartilagine.</p>
+        <ul>
+          <li>Irradia ai <b>lati</b> dell'articolazione (es. lati rotula), non solo frontale</li>
+          <li>Il ginocchio è difficile da penetrare → serve distanza ravvicinata (15 cm)</li>
+          <li>Budget per-zona: 2 ginocchia × 2 lati = 4 zone distinte, ognuna fino ~15 min</li>
+        </ul>
+        <div class="warn">⚠️ Su articolazioni sane il beneficio preventivo è plausibile ma non dimostrato con certezza. Sicuro, aspettative modeste.</div>`
+      }
+    ];
+
+    function renderProtocolli(){
+      document.getElementById('proto-list').innerHTML = PROTOCOLLI.map(p=>`
+        <div class="card">
+          <h2>${p.icona} ${p.nome}</h2>
+          <div class="proto-meta">
+            <span class="chip"><b>Distanza:</b> ${p.dist}</span>
+            <span class="chip"><b>Tempo:</b> ${p.tempo}</span>
+            <span class="chip"><b>Frequenza:</b> ${p.freq}</span>
+            <span class="chip"><b>Dose:</b> ${p.dose}</span>
+            <span class="chip">${p.nm}</span>
+            <span class="chip">${p.prof}</span>
+          </div>
+          <div class="proto-body">${p.body}</div>
+        </div>`).join('');
+    }
+
+    /* ═══ FORMULA DOSE ═══ */
+    // intensità a distanza d: 40 * (10/d)^2  mW/cm²
+    // dose J/cm² = intensità * min * 60 / 1000
+    function dose(dist, min){
+      const i = 40 * Math.pow(10/dist, 2);
+      return i * min * 60 / 1000;
+    }
+    function intensita(dist){ return 40 * Math.pow(10/dist, 2); }
+
+    function calcola(){
+      const d = parseFloat(document.getElementById('calc-dist').value);
+      const t = parseFloat(document.getElementById('calc-time').value);
+      if(!d || !t){ document.getElementById('calc-dose').textContent='—'; return; }
+      const j = dose(d,t);
+      document.getElementById('calc-dose').textContent = j.toFixed(2);
+      const i = intensita(d);
+      let prof = d<=15 ? 'profondo (muscoli/grasso/articolazioni)' : d>=25 ? 'superficiale (pelle/viso)' : 'intermedio';
+      document.getElementById('calc-ctx').innerHTML =
+        `Intensità a ${d} cm: <b>${i.toFixed(1)} mW/cm²</b> · ${i.toFixed(2)} J/cm² al minuto<br>Bersaglio ${prof}`;
+    }
+
+    function calcDiario(){
+      const d = parseFloat(document.getElementById('s-dist').value);
+      const t = parseFloat(document.getElementById('s-time').value);
+      document.getElementById('s-dose').value = (d && t) ? dose(d,t).toFixed(2)+' J/cm²' : '';
+    }
+
+    /* ═══ DIARIO localStorage ═══ */
+    const KEY = 'luceRossa_diario';
+    function loadSessioni(){ try{ return JSON.parse(localStorage.getItem(KEY))||[] }catch(e){ return [] } }
+    function saveSessioni(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+
+    function salvaSessione(){
+      const data = document.getElementById('s-data').value;
+      if(!data){ alert('Inserisci la data'); return; }
+      const d = parseFloat(document.getElementById('s-dist').value);
+      const t = parseFloat(document.getElementById('s-time').value);
+      const s = {
+        id: Date.now(),
+        data,
+        zona: document.getElementById('s-zona').value,
+        dist: d, time: t,
+        dose: (d&&t)? dose(d,t).toFixed(2) : '',
+        note: document.getElementById('s-note').value.trim()
+      };
+      const arr = loadSessioni(); arr.push(s); saveSessioni(arr);
+      document.getElementById('s-note').value='';
+      renderStorico();
+      alert('Sessione salvata ✓');
+    }
+
+    function delSessione(id){
+      if(!confirm('Eliminare questa sessione?')) return;
+      saveSessioni(loadSessioni().filter(s=>s.id!==id));
+      renderStorico();
+    }
+
+    function renderStorico(){
+      const arr = loadSessioni().sort((a,b)=> b.data.localeCompare(a.data) || b.id-a.id);
+      const el = document.getElementById('storico-list');
+      if(!arr.length){ el.innerHTML = '<p class="lista-vuota">Nessuna sessione registrata.</p>'; return; }
+      el.innerHTML = arr.map(s=>`
+        <div class="lista-item">
+          <button class="btn-del" onclick="delSessione(${s.id})">✕</button>
+          <div class="item-date">${s.data}</div>
+          <div class="item-main"><b>${s.zona}</b> — ${s.dist} cm × ${s.time} min${s.dose? ' → '+s.dose+' J/cm²':''}</div>
+          ${s.note? '<div class="item-note">'+s.note.replace(/</g,'&lt;')+'</div>':''}
+        </div>`).join('');
+    }
+
+    function exportCSV(){
+      const arr = loadSessioni().sort((a,b)=> a.data.localeCompare(b.data));
+      if(!arr.length){ alert('Nessuna sessione da esportare'); return; }
+      const rows = [['Data','Zona','Distanza_cm','Tempo_min','Dose_Jcm2','Note']];
+      arr.forEach(s=> rows.push([s.data,s.zona,s.dist,s.time,s.dose,(s.note||'').replace(/"/g,'""')]));
+      const csv = '﻿' + rows.map(r=> r.map(c=>`"${c}"`).join(';')).join('\r\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'luce_rossa_diario.csv';
+      a.click();
+    }
+
+    /* ═══ NAV ═══ */
+    function showSection(id){
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    /* ═══ INIT ═══ */
+    renderProtocolli();
+    calcola();
+    document.getElementById('s-data').value = new Date().toISOString().slice(0,10);
+    calcDiario();
+    renderStorico();
+  </script>
+</body>
+</html>

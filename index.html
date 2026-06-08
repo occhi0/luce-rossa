@@ -6,186 +6,60 @@
   <title>🔴 Luce Rossa — Pluto Pulsar</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#fdf3f1; min-height:100vh; color:#333; }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #fdf3f1;
-      min-height: 100vh;
-      color: #333;
-    }
+    .app-header { background:linear-gradient(135deg,#ff6a5c 0%,#ff3b30 100%); color:white; padding:18px 20px 0; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.15); }
+    .app-header h1 { font-size:1.4rem; font-weight:700; letter-spacing:1px; margin-bottom:14px; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,0.25); }
+    .app-header .sub { font-size:0.78rem; font-weight:400; opacity:0.9; display:block; margin-top:-8px; margin-bottom:10px; }
 
-    /* ── HEADER ── */
-    .app-header {
-      background: linear-gradient(135deg, #ff6a5c 0%, #ff3b30 100%);
-      color: white;
-      padding: 18px 20px 0;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    }
-    .app-header h1 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      margin-bottom: 14px;
-      color: #fff;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.25);
-    }
-    .app-header .sub { font-size: 0.78rem; font-weight: 400; opacity: 0.9; display:block; margin-top:-8px; margin-bottom:10px; }
+    .tabs { display:flex; gap:4px; justify-content:center; overflow-x:auto; }
+    .tab-btn { background:rgba(255,255,255,0.18); border:none; color:#fff; padding:10px 18px; border-radius:10px 10px 0 0; cursor:pointer; font-family:inherit; font-size:0.85rem; font-weight:600; white-space:nowrap; transition:all 0.2s; }
+    .tab-btn:hover { background:rgba(255,255,255,0.3); }
+    .tab-btn.active { background:#fdf3f1; color:#ff3b30; font-weight:700; }
 
-    /* ── TABS ── */
-    .tabs {
-      display: flex;
-      gap: 4px;
-      justify-content: center;
-      overflow-x: auto;
-      padding-bottom: 0;
-    }
-    .tab-btn {
-      background: rgba(255,255,255,0.18);
-      border: none;
-      color: #fff;
-      padding: 10px 16px;
-      border-radius: 10px 10px 0 0;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 600;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-    .tab-btn:hover { background: rgba(255,255,255,0.3); }
-    .tab-btn.active { background: #fdf3f1; color: #ff3b30; font-weight: 700; }
+    .container { max-width:800px; margin:0 auto; padding:20px 15px 40px; }
+    .section { display:none; } .section.active { display:block; }
 
-    /* ── MAIN CONTAINER ── */
-    .container { max-width: 800px; margin: 0 auto; padding: 20px 15px 40px; }
+    .card { background:#fff; border-radius:12px; padding:20px; margin-bottom:16px; box-shadow:0 4px 15px rgba(0,0,0,0.08); border:1px solid #f3dad5; }
+    .card h2 { font-size:1.05rem; font-weight:700; margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid #f3dad5; color:#c0392b; }
+    .card h3 { font-size:0.92rem; color:#b8443a; margin:12px 0 6px; }
 
-    /* ── SECTIONS ── */
-    .section { display: none; }
-    .section.active { display: block; }
+    .section-title { color:white; font-size:1.25rem; text-shadow:0 1px 3px rgba(0,0,0,0.2); font-weight:700; margin-bottom:16px; padding:12px 16px; border-radius:10px; background:linear-gradient(135deg,#ff6a5c,#ff3b30); }
 
-    /* ── CARDS ── */
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      border: 1px solid #f3dad5;
-    }
-    .card h2 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid #f3dad5;
-      color: #c0392b;
-    }
-    .card h3 { font-size: 0.92rem; color:#b8443a; margin: 12px 0 6px; }
-
-    /* ── SECTION TITLE ── */
-    .section-title {
-      color: white;
-      font-size: 1.25rem;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      font-weight: 700;
-      margin-bottom: 16px;
-      padding: 12px 16px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #ff6a5c, #ff3b30);
-    }
-
-    /* ── PROTOCOL CARDS ── */
     .proto-meta { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
-    .chip {
-      background:#fff0ee; color:#c0392b; border:1px solid #f3c4bd;
-      border-radius:8px; padding:5px 10px; font-size:0.82rem; font-weight:600;
-    }
+    .chip { background:#fff0ee; color:#c0392b; border:1px solid #f3c4bd; border-radius:8px; padding:5px 10px; font-size:0.82rem; font-weight:600; }
     .chip b { font-weight:700; }
     .proto-body { font-size:0.9rem; line-height:1.5; color:#444; }
-    .proto-body ul { margin:6px 0 6px 18px; }
-    .proto-body li { margin-bottom:4px; }
+    .proto-body ul { margin:6px 0 6px 18px; } .proto-body li { margin-bottom:4px; }
     .warn { background:#fff8e1; border-left:4px solid #f1c40f; padding:8px 12px; border-radius:6px; margin:8px 0; font-size:0.85rem; }
     .danger { background:#fdecea; border-left:4px solid #e74c3c; padding:8px 12px; border-radius:6px; margin:8px 0; font-size:0.85rem; }
 
-    /* ── FORM ── */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .form-group { display: flex; flex-direction: column; gap: 5px; }
-    .form-group.full-width { grid-column: 1 / -1; }
-    .form-group label { font-size: 0.8rem; font-weight: 600; color: #555; }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      padding: 9px 12px;
-      border: 2px solid #f3dad5;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      color: #333;
-      background: white;
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus { border-color: #ff6a5c; outline: none; }
-    .form-group textarea { resize: vertical; }
+    .form-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:14px; }
+    .form-group { display:flex; flex-direction:column; gap:5px; }
+    .form-group.full-width { grid-column:1 / -1; }
+    .form-group label { font-size:0.8rem; font-weight:600; color:#555; }
+    .form-group input, .form-group select, .form-group textarea { padding:9px 12px; border:2px solid #f3dad5; border-radius:8px; font-family:inherit; font-size:0.9rem; color:#333; background:white; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:#ff6a5c; outline:none; }
+    .form-group textarea { resize:vertical; }
 
-    /* ── CALC OUTPUT ── */
-    .calc-out {
-      background: linear-gradient(135deg, #ff6a5c, #ff3b30);
-      color:#fff; border-radius:12px; padding:18px; text-align:center; margin-top:8px;
-    }
-    .calc-out .big { font-size:2rem; font-weight:800; display:block; }
-    .calc-out .lbl { font-size:0.8rem; opacity:0.9; }
-    .calc-out .ctx { font-size:0.82rem; margin-top:8px; opacity:0.95; }
+    .btn-primary { width:100%; padding:12px; background:linear-gradient(135deg,#ff6a5c,#ff3b30); color:white; border:none; border-radius:10px; font-family:inherit; font-size:1rem; font-weight:700; cursor:pointer; margin-top:10px; transition:opacity 0.2s,transform 0.1s; }
+    .btn-primary:hover { opacity:0.88; } .btn-primary:active { transform:scale(0.98); }
 
-    /* ── BUTTONS ── */
-    .btn-primary {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #ff6a5c, #ff3b30);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: opacity 0.2s, transform 0.1s;
-    }
-    .btn-primary:hover { opacity: 0.88; }
-    .btn-primary:active { transform: scale(0.98); }
+    .card-header-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid #f3dad5; }
+    .card-header-row h2 { border:none; margin:0; padding:0; }
+    .btn-export { padding:6px 12px; background:#c0392b; color:white; border:none; border-radius:8px; font-family:inherit; font-size:0.8rem; font-weight:600; cursor:pointer; }
 
-    .card-header-row {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #f3dad5;
-    }
-    .card-header-row h2 { border: none; margin: 0; padding: 0; }
-    .btn-export {
-      padding: 6px 12px; background: #c0392b; color: white; border: none;
-      border-radius: 8px; font-family: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer;
-    }
-
-    /* ── LISTA ── */
-    .lista-vuota { color: #bbb; font-style: italic; font-size: 0.9rem; padding: 10px 0; }
-    .lista-item {
-      background: #fff; border: 1px solid #f3dad5; border-radius: 8px;
-      padding: 10px 14px; margin-bottom: 8px; position: relative;
-    }
-    .lista-item .item-date  { font-size: 0.8rem; color: #c0392b; font-weight: 700; }
-    .lista-item .item-main  { font-size: 0.9rem; margin: 4px 0; color: #333; }
-    .lista-item .item-note  { font-size: 0.8rem; color: #888; font-style: italic; }
-    .lista-item .btn-del {
-      position: absolute; top: 8px; right: 8px;
-      background: none; border: none; color: #ddd; cursor: pointer; font-size: 1rem; padding: 2px 6px;
-    }
-    .lista-item .btn-del:hover { color: #e74c3c; }
-    .hint { font-size: 0.75rem; color: #999; margin-top:4px; }
+    .lista-vuota { color:#bbb; font-style:italic; font-size:0.9rem; padding:10px 0; }
+    .lista-item { background:#fff; border:1px solid #f3dad5; border-radius:8px; padding:10px 14px; margin-bottom:8px; position:relative; }
+    .lista-item .item-date { font-size:0.8rem; color:#c0392b; font-weight:700; }
+    .lista-item .item-main { font-size:0.9rem; margin:4px 0; color:#333; }
+    .lista-item .item-note { font-size:0.8rem; color:#888; font-style:italic; }
+    .lista-item .btn-del { position:absolute; top:8px; right:8px; background:none; border:none; color:#ddd; cursor:pointer; font-size:1rem; padding:2px 6px; }
+    .lista-item .btn-del:hover { color:#e74c3c; }
+    .hint { font-size:0.75rem; color:#999; margin-top:4px; }
     .footer-note { text-align:center; font-size:0.72rem; color:#bba; padding:14px; }
+    .specs { font-size:0.82rem; color:#555; line-height:1.6; }
+    .specs b { color:#c0392b; }
   </style>
 </head>
 <body>
@@ -194,8 +68,8 @@
     <span class="sub">Pluto Pulsar · 630/670/810/830/850 nm</span>
     <div class="tabs">
       <button class="tab-btn active" onclick="showSection('protocolli')">📋 Protocolli</button>
-      <button class="tab-btn" onclick="showSection('calcolatore')">🧮 Calcolatore</button>
       <button class="tab-btn" onclick="showSection('diario')">📒 Diario</button>
+      <button class="tab-btn" onclick="showSection('device')">💡 Dispositivo</button>
     </div>
   </div>
 
@@ -209,50 +83,16 @@
         <h3 style="color:#a07a00;">💡 Regole generali Pluto</h3>
         <div class="proto-body">
           <ul>
-            <li><b>COB + LED</b> entrambi accesi (rosso + infrarosso insieme)</li>
+            <li><b>COB + LED</b> entrambi accesi (tutte le lunghezze d'onda insieme)</li>
             <li>Modalità <b>continua</b> (pulsata in sospeso fino al libro Rossiello)</li>
             <li>Pelle <b>nuda e pulita</b>, niente creme/oli prima (pomate dopo)</li>
             <li>⛔ <b>Mai la sera</b> — effetto stimolante, riduce melatonina</li>
-            <li>Frequenza ideale <b>3-7 volte/settimana</b></li>
+            <li>Frequenza ideale <b>3-7 volte/settimana</b>, max <b>2 esposizioni/giorno</b></li>
             <li><b>"Di più non è meglio"</b> — legge bifasica: troppo = stress ossidativo</li>
-            <li>Budget = <b>minuti-PER-ZONA</b> (max ~15-20 min su stessa zona), non minuti totali di lampada</li>
+            <li>Budget <b>per-zona</b> (max ~15-20 min sulla stessa zona), non minuti totali di lampada</li>
             <li>Pause su sessioni lunghe (la lampada si scalda, non bloccare ventole)</li>
           </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ CALCOLATORE ══ -->
-    <div id="calcolatore" class="section">
-      <div class="section-title">🧮 Calcolatore dose</div>
-      <div class="card">
-        <h2>Distanza + tempo → dose</h2>
-        <p class="hint">Base Pluto: 40 mW/cm² a 10 cm. La dose dipende dalla distanza (al quadrato) e dal tempo.</p>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Distanza (cm)</label>
-            <input type="number" id="calc-dist" value="30" min="3" step="1" oninput="calcola()">
-          </div>
-          <div class="form-group">
-            <label>Tempo (minuti)</label>
-            <input type="number" id="calc-time" value="5" min="0.5" step="0.5" oninput="calcola()">
-          </div>
-        </div>
-        <div class="calc-out">
-          <span class="big" id="calc-dose">—</span>
-          <span class="lbl">J/cm² (dose in superficie)</span>
-          <div class="ctx" id="calc-ctx"></div>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Riferimenti dose</h3>
-        <div class="proto-body">
-          <ul>
-            <li><b>Viso/antiaging:</b> ~0,5-1,3 J/cm²</li>
-            <li><b>Dermatite:</b> ottimale ~4 J/cm² (range 2-8)</li>
-            <li><b>Grasso/inestetismi:</b> studi alti (fino 127), con Pluto ~5-16 J/cm²</li>
-            <li><b>Articolazioni:</b> prevenzione ~10-16 J/cm² (terapeutico 39-52)</li>
-          </ul>
+          <p class="hint">I tempi indicati seguono il libretto Pluto (tarati dal produttore sul dispositivo reale).</p>
         </div>
       </div>
     </div>
@@ -279,16 +119,27 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Distanza (cm)</label>
-            <input type="number" id="s-dist" value="30" min="3" oninput="calcDiario()">
+            <label>Distanza</label>
+            <select id="s-dist">
+              <option>30 cm (superficiale)</option>
+              <option>15 cm (profondo)</option>
+              <option>Altro</option>
+            </select>
           </div>
           <div class="form-group">
             <label>Tempo (min)</label>
-            <input type="number" id="s-time" value="5" min="0.5" step="0.5" oninput="calcDiario()">
+            <input type="number" id="s-time" value="3" min="0.5" step="0.5">
           </div>
           <div class="form-group">
-            <label>Dose (auto)</label>
-            <input type="text" id="s-dose" readonly style="background:#fff0ee;font-weight:700;color:#c0392b;">
+            <label>Modalità</label>
+            <select id="s-mod">
+              <option>Continua</option>
+              <option>Pulsata 10 Hz</option>
+              <option>Pulsata 20 Hz</option>
+              <option>Pulsata 40 Hz</option>
+              <option>Pulsata 100 Hz</option>
+              <option>Pulsata 200 Hz</option>
+            </select>
           </div>
           <div class="form-group full-width">
             <label>Osservazioni</label>
@@ -306,55 +157,108 @@
       </div>
     </div>
 
+    <!-- ══ DISPOSITIVO ══ -->
+    <div id="device" class="section">
+      <div class="section-title">💡 La mia Pluto Pulsar</div>
+      <div class="card">
+        <h2>Specifiche</h2>
+        <div class="specs">
+          <p><b>Bulbo centrale (COB) 200W:</b> 670 / 830 / 850 nm — fascio collimato a 30°, alta intensità</p>
+          <p><b>20 diodi periferici (LED) 3W:</b> 630 / 670 / 810 / 830 / 850 nm</p>
+          <p><b>Irradianza:</b> 220 mW/cm² a 5″ (~13 cm) · 47 mW/cm² a 12″ (~30 cm)</p>
+          <p><b>Modalità:</b> continua + pulsata (10/20/40/100/200 Hz)</p>
+          <p><b>Doppio interruttore:</b> COB e LED gestiti separatamente</p>
+          <p><b>Timer:</b> step di 1 minuto · Display touch · Flicker free · 2,2 kg</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Le lunghezze d'onda</h3>
+        <div class="proto-body">
+          <ul>
+            <li><b>630 nm</b> (rosso) — pelle, collagene, antiaging, dermatite</li>
+            <li><b>670 nm</b> (rosso, COB) — pelle + occhi/retina · attiva il blu di metilene (aPDT)</li>
+            <li><b>810 nm</b> (NIR) — profondo: grasso, muscoli</li>
+            <li><b>830 nm</b> (NIR) — guarigione profonda</li>
+            <li><b>850 nm</b> (NIR) — penetrazione massima, articolazioni</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Frequenze pulsate (da approfondire col libro)</h3>
+        <div class="proto-body">
+          <ul>
+            <li><b>10 Hz</b> (alfa) — rilassamento, focus, memoria</li>
+            <li><b>20 Hz</b> (beta) — concentrazione, attenzione</li>
+            <li><b>40 Hz</b> (gamma) — performance cognitiva</li>
+            <li><b>100/200 Hz</b> — stati meditativi profondi</li>
+          </ul>
+          <div class="warn">⏸️ Pulsata in sospeso: usare la continua finché il libro di Rossiello non chiarisce l'uso delle frequenze.</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="footer-note">App personale · dati salvati solo su questo dispositivo (localStorage)</div>
 
   <script>
-    /* ═══ DATI PROTOCOLLI ═══ */
+    /* ═══ PROTOCOLLI (tempi dal libretto Pluto) ═══ */
     const PROTOCOLLI = [
       {
-        icona:'✨', nome:'Viso / antiaging', nm:'630 nm (rosso)', prof:'Superficiale',
-        dist:'30 cm', tempo:'2 → 5 min', freq:'3-4×/sett', dose:'~0,5-1,3 J/cm²',
-        body:`<p>Stimola collagene/elastina, riduce rughe fini e migliora il tono.</p>
+        icona:'✨', nome:'Viso / antiaging', nm:'630 + 670 nm', prof:'Superficiale',
+        dist:'30 cm', tempo:'2-5 min', freq:'3-4×/sett',
+        body:`<p>Stimola collagene/elastina, riduce rughe fini, migliora il tono.</p>
         <ul>
-          <li>Parti da <b>2 min</b> la prima settimana (test), poi sali a <b>5 min</b></li>
-          <li>Ciclo minimo <b>4 settimane</b>; risultati visibili dopo 4-8 settimane</li>
-          <li>Occhi <b>chiusi</b> (o aperti max 3 min)</li>
-        </ul>
-        <div class="warn">⚠️ A 30 cm la pelle del viso (delicata) non va sovradosata: niente 15 cm sul viso.</div>`
+          <li>Tabella libretto: <b>2-5 min a 30 cm</b> (15 cm è per il profondo, non per il viso)</li>
+          <li>Parti dal minimo (2 min), valuta tolleranza, poi eventualmente sali</li>
+          <li>Anti-aging generale: 3 min per zona, max 15 min totali</li>
+          <li>Ciclo 4+ settimane; risultati dopo 4-8 settimane</li>
+          <li>Occhi <b>chiusi</b> (o aperti max 3 min se ≥15 cm)</li>
+        </ul>`
       },
       {
-        icona:'🩹', nome:'Dermatite atopica (dorso)', nm:'630 nm (rosso)', prof:'Superficiale',
-        dist:'30 cm', tempo:'3-5 → 15 min (gradini)', freq:'3-4×/sett', dose:'ottimale ~4 J/cm²',
+        icona:'🩹', nome:'Dermatite atopica (dorso)', nm:'630 nm', prof:'Superficiale',
+        dist:'30 cm', tempo:'2-5 min (test prima)', freq:'3-4×/sett',
         body:`<p>Antinfiammatorio + riparativo (meccanismo diverso da cortisone/immunosoppressori).</p>
         <ul>
-          <li><b>Sett. 1:</b> 3-5 min (~1 J/cm²) — test su piccola area + osserva 24h</li>
-          <li><b>Sett. 2-3:</b> 7-8 min (~2 J/cm²)</li>
-          <li><b>Sett. 4+:</b> ~15 min (~4 J/cm²)</li>
+          <li>Distanza pelle = <b>30 cm</b>, tempi come per la pelle (2-5 min)</li>
+          <li><b>Test su piccola area</b> + osserva 24h prima di estendere</li>
+          <li>Parti corta, valuta, poi regola</li>
         </ul>
         <div class="danger">⛔ Mai su pelle aperta/sanguinante. Pomate DOPO, non prima.</div>`
       },
       {
-        icona:'🔥', nome:'Grasso / inestetismi addome', nm:'810+850 nm (NIR) + rosso', prof:'Profondo',
-        dist:'15 cm', tempo:'5-15 min/zona', freq:'3×/sett', dose:'~5-16 J/cm²',
-        body:`<p><b>Due obiettivi diversi:</b></p>
+        icona:'🔥', nome:'Grasso / inestetismi addome', nm:'810 + 850 nm (NIR)', prof:'Profondo',
+        dist:'15 cm', tempo:'2-5 min/zona', freq:'3×/sett',
+        body:`<p>Distanza profonda 15 cm (6″), tempi libretto 2-5 min per zona. <b>Due obiettivi:</b></p>
         <ul>
-          <li><b>Volume/centimetri:</b> coadiuvante modesto — la luce libera i lipidi ma vanno consumati con <b>movimento subito dopo</b>, altrimenti rientrano. Non è un dimagrante.</li>
-          <li><b>Inestetismi (cellulite, tono, pelle):</b> razionale più solido (microcircolo + linfa + collagene). Qui <b>non serve</b> attività fisica dopo. L'850 nm penetra bene.</li>
+          <li><b>Volume/centimetri:</b> coadiuvante modesto — i lipidi liberati vanno consumati con <b>movimento subito dopo</b>, altrimenti rientrano. Non è un dimagrante.</li>
+          <li><b>Inestetismi (cellulite, tono):</b> razionale più solido (microcircolo + linfa + collagene). Qui <b>non serve</b> attività dopo.</li>
         </ul>
-        <div class="warn">⚠️ Sotto-dosato vs studi (pannelli grandi). Aspettative modeste; per grasso viscerale meglio dieta+attività.</div>`
+        <div class="warn">⚠️ Aspettative modeste; per grasso viscerale meglio dieta + attività.</div>`
       },
       {
-        icona:'🦵', nome:'Articolazioni (prevenzione)', nm:'810/830/850 nm (NIR)', prof:'Profondo',
-        dist:'15 cm', tempo:'10-15 min/zona', freq:'3×/sett', dose:'~10-16 J/cm²',
-        body:`<p>NIR 780-860 nm raccomandato (WALT). Riduce infiammazione, supporta cartilagine.</p>
+        icona:'🦵', nome:'Articolazioni', nm:'810/830/850 nm (NIR)', prof:'Profondo',
+        dist:'15 cm', tempo:'2-5 min/zona', freq:'3×/sett',
+        body:`<p>NIR 780-860 nm raccomandato (WALT). Riduce infiammazione, supporta i tessuti.</p>
         <ul>
-          <li>Irradia ai <b>lati</b> dell'articolazione (es. lati rotula), non solo frontale</li>
-          <li>Il ginocchio è difficile da penetrare → serve distanza ravvicinata (15 cm)</li>
-          <li>Budget per-zona: 2 ginocchia × 2 lati = 4 zone distinte, ognuna fino ~15 min</li>
+          <li>Distanza profonda 15 cm (6″), tempi libretto 2-5 min per zona</li>
+          <li>Irradia ai <b>lati</b> dell'articolazione, non solo frontale</li>
+          <li>Budget per-zona: es. 2 ginocchia × 2 lati = 4 zone distinte</li>
+          <li>Effetto cumulativo: <b>dosi moderate ripetute nel tempo</b>, a giorni alterni — non sedute lunghe ravvicinate</li>
         </ul>
-        <div class="warn">⚠️ Su articolazioni sane il beneficio preventivo è plausibile ma non dimostrato con certezza. Sicuro, aspettative modeste.</div>`
+        <div class="warn">⚠️ Su articolazioni sane il beneficio preventivo è plausibile ma non dimostrato con certezza. Caso terapeutico vero → prima inquadramento medico.</div>`
+      },
+      {
+        icona:'🦠', nome:'aPDT — MB + luce rossa (infezioni)', nm:'670 nm (COB)', prof:'Superficiale',
+        dist:'da definire', tempo:'da definire', freq:'sedute distanziate',
+        body:`<p>Terapia fotodinamica antimicrobica: blu di metilene topico attivato dalla luce rossa → uccide i batteri (anche resistenti). Il MB si attiva a ~664-670 nm → la <b>COB (670 nm)</b> è l'emettitore chiave.</p>
+        <ul>
+          <li>MB topico ~<b>0,01%</b> (punto di partenza prudente)</li>
+          <li>Incubazione 15-30 min al buio prima della luce</li>
+          <li>Poi illuminazione con la COB</li>
+        </ul>
+        <div class="danger">⏸️ Protocollo da rifinire SOLO dopo il referto della biopsia (luglio). Subordinato alla diagnosi. Il MB macchia (pelle giorni, vestiti permanente).</div>`
       }
     ];
 
@@ -366,39 +270,11 @@
             <span class="chip"><b>Distanza:</b> ${p.dist}</span>
             <span class="chip"><b>Tempo:</b> ${p.tempo}</span>
             <span class="chip"><b>Frequenza:</b> ${p.freq}</span>
-            <span class="chip"><b>Dose:</b> ${p.dose}</span>
             <span class="chip">${p.nm}</span>
             <span class="chip">${p.prof}</span>
           </div>
           <div class="proto-body">${p.body}</div>
         </div>`).join('');
-    }
-
-    /* ═══ FORMULA DOSE ═══ */
-    // intensità a distanza d: 40 * (10/d)^2  mW/cm²
-    // dose J/cm² = intensità * min * 60 / 1000
-    function dose(dist, min){
-      const i = 40 * Math.pow(10/dist, 2);
-      return i * min * 60 / 1000;
-    }
-    function intensita(dist){ return 40 * Math.pow(10/dist, 2); }
-
-    function calcola(){
-      const d = parseFloat(document.getElementById('calc-dist').value);
-      const t = parseFloat(document.getElementById('calc-time').value);
-      if(!d || !t){ document.getElementById('calc-dose').textContent='—'; return; }
-      const j = dose(d,t);
-      document.getElementById('calc-dose').textContent = j.toFixed(2);
-      const i = intensita(d);
-      let prof = d<=15 ? 'profondo (muscoli/grasso/articolazioni)' : d>=25 ? 'superficiale (pelle/viso)' : 'intermedio';
-      document.getElementById('calc-ctx').innerHTML =
-        `Intensità a ${d} cm: <b>${i.toFixed(1)} mW/cm²</b> · ${i.toFixed(2)} J/cm² al minuto<br>Bersaglio ${prof}`;
-    }
-
-    function calcDiario(){
-      const d = parseFloat(document.getElementById('s-dist').value);
-      const t = parseFloat(document.getElementById('s-time').value);
-      document.getElementById('s-dose').value = (d && t) ? dose(d,t).toFixed(2)+' J/cm²' : '';
     }
 
     /* ═══ DIARIO localStorage ═══ */
@@ -409,14 +285,13 @@
     function salvaSessione(){
       const data = document.getElementById('s-data').value;
       if(!data){ alert('Inserisci la data'); return; }
-      const d = parseFloat(document.getElementById('s-dist').value);
-      const t = parseFloat(document.getElementById('s-time').value);
       const s = {
         id: Date.now(),
         data,
         zona: document.getElementById('s-zona').value,
-        dist: d, time: t,
-        dose: (d&&t)? dose(d,t).toFixed(2) : '',
+        dist: document.getElementById('s-dist').value,
+        time: document.getElementById('s-time').value,
+        mod: document.getElementById('s-mod').value,
         note: document.getElementById('s-note').value.trim()
       };
       const arr = loadSessioni(); arr.push(s); saveSessioni(arr);
@@ -439,7 +314,7 @@
         <div class="lista-item">
           <button class="btn-del" onclick="delSessione(${s.id})">✕</button>
           <div class="item-date">${s.data}</div>
-          <div class="item-main"><b>${s.zona}</b> — ${s.dist} cm × ${s.time} min${s.dose? ' → '+s.dose+' J/cm²':''}</div>
+          <div class="item-main"><b>${s.zona}</b> — ${s.dist} · ${s.time} min · ${s.mod||'continua'}</div>
           ${s.note? '<div class="item-note">'+s.note.replace(/</g,'&lt;')+'</div>':''}
         </div>`).join('');
     }
@@ -447,8 +322,8 @@
     function exportCSV(){
       const arr = loadSessioni().sort((a,b)=> a.data.localeCompare(b.data));
       if(!arr.length){ alert('Nessuna sessione da esportare'); return; }
-      const rows = [['Data','Zona','Distanza_cm','Tempo_min','Dose_Jcm2','Note']];
-      arr.forEach(s=> rows.push([s.data,s.zona,s.dist,s.time,s.dose,(s.note||'').replace(/"/g,'""')]));
+      const rows = [['Data','Zona','Distanza','Tempo_min','Modalita','Note']];
+      arr.forEach(s=> rows.push([s.data,s.zona,s.dist,s.time,s.mod||'',(s.note||'').replace(/"/g,'""')]));
       const csv = '﻿' + rows.map(r=> r.map(c=>`"${c}"`).join(';')).join('\r\n');
       const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
       const a = document.createElement('a');
@@ -467,9 +342,7 @@
 
     /* ═══ INIT ═══ */
     renderProtocolli();
-    calcola();
     document.getElementById('s-data').value = new Date().toISOString().slice(0,10);
-    calcDiario();
     renderStorico();
   </script>
 </body>
